@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a:hover {
+  cursor: pointer;
+}
+html{
+  background-color: #fff;
+}
+body {
+  font-family: 'Circular Std Book', sans-serif;
+  background-color: #fff;
+}
+iframe {
+  display: none;
+}
