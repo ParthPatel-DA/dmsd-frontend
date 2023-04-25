@@ -6,7 +6,13 @@ import { Provider } from 'react-redux';
 import rootReducer from './store/reducer';
 import {
   watchAuthentication,
+  watchBooking,
+  watchCustomer,
+  watchLocation,
   watchProfile,
+  watchReport,
+  watchService,
+  watchVehicle,
 } from './store/sagas';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -24,6 +30,12 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(sagaMidd
 
 sagaMiddleware.run(watchAuthentication);
 sagaMiddleware.run(watchProfile);
+sagaMiddleware.run(watchVehicle);
+sagaMiddleware.run(watchBooking);
+sagaMiddleware.run(watchLocation);
+sagaMiddleware.run(watchService);
+sagaMiddleware.run(watchCustomer);
+sagaMiddleware.run(watchReport);
 
 ReactDOM.render(
   <React.StrictMode>

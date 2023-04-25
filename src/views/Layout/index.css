@@ -1,0 +1,24 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    background: #505050;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+}
+
+.nav-list {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+}
+
+.nav-list a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav-list a:hover {
+    text-decoration: underline;
+}

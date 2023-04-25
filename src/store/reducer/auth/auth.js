@@ -19,6 +19,7 @@ export default (state = initialState, { type, payload }) => {
         isLogin: true,
         isLoading: false,
         authToken: payload.token,
+        userData: payload,
         errorMsg: '',
       };
     }

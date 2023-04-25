@@ -1,0 +1,9 @@
+.vehicle {
+    padding: 20px;
+}
+
+.vehicle-list-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}

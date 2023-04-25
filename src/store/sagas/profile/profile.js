@@ -1,4 +1,4 @@
-import { put, call } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import {
   getProfileStart,
@@ -8,8 +8,8 @@ import {
   editProfileStart,
   editProfileSuccess,
   editProfileFail,
-  showModal,
   logout,
+  loginSuccess,
 } from '../../actions';
 import { errorHandler } from '../../../utils';
 
@@ -30,42 +30,44 @@ export function* editProfileSaga(action) {
   yield put(editProfileStart());
   const {
     data,
-    hideSuccessPopup,
     setIsSubmitted,
-    setEditProfile,
-    setUpdateProfileRequestHandler,
-    key,
-    closeModel,
   } = action.payload;
   yield errorHandler({
-    endpoint: `/users/updateUserProfile`,
+    endpoint: `/customers/${data.customerId}`,
     successHandler: yield function* (response) {
       if (data.phoneNumber) {
         yield put(logout({ logoutType: 'manual' }));
       } else {
-        yield put(editProfileSuccess({ data, key }));
-        if (!hideSuccessPopup) {
-          yield put(
-            showModal({
-              title: 'Edit Profile',
-              open: true,
-              notifyType: 2,
-              message: response.msg,
-            }),
-          );
+        yield put(editProfileSuccess({ data }));
+        // yield put(
+        //   showModal({
+        //     title: 'Edit Profile',
+        //     open: true,
+        //     notifyType: 2,
+        //     message: response.msg,
+        //   }),
+        // );
+        if (response.data.person.token) {
+          yield call([localStorage, 'setItem'], 'authToken', response.data.person.token);
+          yield call([localStorage, 'setItem'], 'data', JSON.stringify(response.data));
+          yield call([localStorage, 'setItem'], 'userid', response.data.person.id);
         }
-        if (setEditProfile) {
-          setEditProfile(false);
-        }
+        const responseData = response.data.person !== undefined ? response.data.person : 
+        response.data;
+        setIsSubmitted(false);
+        yield put(
+          loginSuccess({
+            token: response.data.token,
+            ...responseData.person,
+            // ...response.data,
+            // ...response.data.userData,
+          }),
+        );
+        window.location.reload();
+
         if (setIsSubmitted) {
           setIsSubmitted(false);
         }
-      }
-      // if (!key) {
-      //   yield put(getCurrentUserProfileSagaAction());
-      // }
-      if (closeModel) {
-        closeModel();
       }
     },
     failHandler: yield function* (response) {
@@ -73,11 +75,7 @@ export function* editProfileSaga(action) {
       setIsSubmitted(false);
     },
     failHandlerType: 'CUSTOM',
-    apiType: 'post',
+    apiType: 'put',
     payload: data,
   });
-
-  if (setUpdateProfileRequestHandler) {
-    setUpdateProfileRequestHandler(key, 'REMOVE');
-  }
 }

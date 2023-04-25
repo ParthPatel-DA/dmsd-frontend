@@ -26,11 +26,23 @@ export function* loginSaga(action) {
   yield errorHandler({
     endpoint: `/customers/login`,
     successHandler: yield function* (response) {
-      if (response.data.person.token) {
-        yield call([localStorage, 'setItem'], 'authToken', response.data.person.token);
-        // yield call([localStorage, 'setItem'], 'userid', response.data._id);
+      if ((response.data.person && response.data.person.token) || response.data.token) {
+        yield call(
+          [localStorage, 'setItem'],
+          'authToken',
+          response.data.person ? response.data.person.token : response.data.token,
+        );
+        yield call([localStorage, 'setItem'], 'data', JSON.stringify(response.data));
+        yield call(
+          [localStorage, 'setItem'],
+          'userid',
+          response.data.person ? response.data.person.id : response.data.id,
+        );
       }
-      const data = response.data.person !== undefined ? response.data.person : response.data;
+      const data =
+        response.data.person !== undefined
+          ? { ...response.data, ...response.data.person }
+          : response.data;
       setIsSubmitted(false);
       yield put(
         loginSuccess({
@@ -40,6 +52,7 @@ export function* loginSaga(action) {
           // ...response.data.userData,
         }),
       );
+      window.location.reload();
     },
     failHandler: yield function* (response) {
       yield put(loginFail(response));
@@ -55,20 +68,27 @@ export function* loginSaga(action) {
 
 export function* signupSaga(action) {
   yield put(signupStart());
-  const { data, setPhoneVerificationModal, closeModel, setIsSubmitted } = action.payload;
+  const { data, setIsSubmitted } = action.payload;
   yield errorHandler({
-    endpoint: `/users/signup`,
+    endpoint: `/customers/register`,
     successHandler: yield function* (response) {
-      // if (data.loginType === 'manual') {
-      yield put(signupSuccess(response.data));
-      closeModel();
-      setPhoneVerificationModal(true);
-      // modalHandler(true);
-      // } else {
-      //   yield call([localStorage, 'setItem'], 'authToken', response.data.token);
-      //   yield call([localStorage, 'setItem'], 'userid', response.data._id);
-      //   yield put(loginSuccess(response.data));
-      // }
+      // yield put(signupSuccess(response.data));
+      if (response.data.person.token) {
+        yield call([localStorage, 'setItem'], 'authToken', response.data.person.token);
+        yield call([localStorage, 'setItem'], 'data', JSON.stringify(response.data));
+        yield call([localStorage, 'setItem'], 'userid', response.data.person.id);
+      }
+      const responseData =
+        response.data.person !== undefined ? response.data.person : response.data;
+      setIsSubmitted(false);
+      yield put(
+        loginSuccess({
+          token: response.data.token,
+          ...responseData.person,
+          // ...response.data,
+          // ...response.data.userData,
+        }),
+      );
     },
     failHandler: yield function* (response) {
       yield put(signupFail(response));
@@ -91,6 +111,7 @@ export function* logoutSaga(action) {
 export function* authenticationValidatorSaga(action) {
   yield put(loginStart());
   const token = yield localStorage.getItem('authToken');
+  const responseData = yield JSON.parse(localStorage.getItem('data'));
   if (!token) {
     yield put(logout({ fromAuth: true }));
   } else {
@@ -100,7 +121,7 @@ export function* authenticationValidatorSaga(action) {
     //     isCurrentUser: true,
     //   }),
     // );
-    yield put(loginSuccess({ token }));
+    yield put(loginSuccess({ token, ...responseData, ...responseData.person }));
   }
 }
 

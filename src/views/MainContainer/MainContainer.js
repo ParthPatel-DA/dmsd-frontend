@@ -4,9 +4,7 @@ import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Layout from '../Layout/Layout';
 import { userRoutes, adminRoutes, employeeRoutes } from '../../routes';
-// import {
-//   getCurrentUserProfileSaga,
-// } from '../../store/actions';
+import { getProfileSaga } from '../../store/actions';
 import axiosMain from '../../http/axios/axios_main';
 import SetTokenHeader from '../../hoc/SetTokenHeader/SetTokenHeader';
 import { Loader } from '../../components';
@@ -14,19 +12,19 @@ import { Loader } from '../../components';
 const MainContainer = () => {
   const dispatch = useDispatch();
   const { userProfileData } = useSelector(state => state.profile);
-  const { isUserInterestLoading } = useSelector(state => state.user);
+  const { userData } = useSelector(state => state.auth);
   // const routes = (() => incompleteUserRoute)();
   const routes = (() =>
-  userProfileData.personType === 'ADMIN' ? 
-  adminRoutes : userProfileData.personType === 'EMPLOYEE' ? employeeRoutes : userRoutes)();
+  userData && userData.personType === 'ADMIN' ? 
+  adminRoutes : userData.personType === 'EMPLOYEE' ? employeeRoutes : userRoutes)();
   const history = useHistory();
   const { pathname } = history.location;
 
   useEffect(() => {
-    // dispatch(getCurrentUserProfileSaga());
+    // dispatch(getProfileSaga());
   }, []);
 
-  return !userProfileData ? (
+  return !userData.id ? (
     <Loader isFullLoader />
   ) : (
     <Layout>

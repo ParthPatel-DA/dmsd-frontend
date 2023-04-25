@@ -2,6 +2,7 @@
 export { default as LOADING_GIF } from './loader.gif';
 
 // images(png/jpg)
+export { default as LOGO_PNG } from './logo.png';
 
 // images(png/jpg)
 export { default as CLOSE_SVG } from './close.svg';

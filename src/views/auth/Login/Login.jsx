@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 import { login, resetErrorMsg } from '../../../store/actions';
 
 import {
@@ -38,8 +39,9 @@ const Login = props => {
     <div className="row myheightcenter">
       <div className="col-md-12 signin-section d-flex justify-content-center align-items-center">
         <div className="signIn-section-content ">
-          <div className="mt-5">
-            Logo
+          <h4 className="mt-5 text-center">Woody’s Automotive</h4>
+          <div className='text-center mt-3 mb-3'>
+            Login
           </div>
           <Formik
             initialValues={{
@@ -108,14 +110,24 @@ const Login = props => {
                 <div className="error-message">{errorMsg}</div>
                 <button
                   type="submit"
-                  className="btn btn-block btn_primary mt-26"
+                  className="mt-26"
                   disabled={isSubmitted}
                 >
-                  ENTER
+                  Sign in
                 </button>
               </form>
             )}
           </Formik>
+          <p className="mt-4 text-center signIn-text pb-3">
+            I do not already have an account.
+            <Link
+              to="/sign-up"
+              className='ml-2'
+              style={{ textDecoration: 'underline' }}
+            >
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>

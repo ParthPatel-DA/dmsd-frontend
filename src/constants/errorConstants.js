@@ -12,7 +12,7 @@ export const SET_PASSWORDS_NOT_MATCH = "Password and Confirm password doesn't ma
 export const SET_NEW_PASSWORDS_NOT_MATCH = "New password and Confirm new password doesn't match";
 export const CURRENT_PASSWORDS_MATCH = "Current password and new password shouldn't match";
 export const NAME_REQUIRED = 'Name is required';
-export const FIRSTNAME_REQUIRED = 'First name is required';
+export const FIRSTNAME_REQUIRED = 'Name is required';
 export const FIRSTNAME_CANNOT_EMPTY = "First name shouldn't contain only spaces";
 export const FIRSTNAME_SPECIAL_CHECK = "First name shouldn't contain digits";
 export const LASTNAME_REQUIRED = 'Last name is required';
@@ -48,3 +48,4 @@ export const SUBJECT_REQUIRED = 'Subject is required';
 export const MESSAGE_REQUIRED = 'Message is required';
 
 export const USERNAME_PHONE_REQUIRED = 'Username / Phone number is required';
+
