@@ -4,11 +4,13 @@ import {
   getBookingSaga, getLocationSaga, getServiceSaga, getVehicleSaga
 } from '../../../store/actions';
 import AddBooking from './AddBooking';
+import ViewInvoice from './ViewInvoice';
 import './index.css';
 
 // eslint-disable-next-line no-unused-vars
 const Booking = props => {
   const [openAddBooking, setOpenAddBooking] = useState(false)
+  const [openViewInvoice, setOpenViewInvoice] = useState(null)
   const { bookingList } = useSelector(
     state => state.booking,
   );
@@ -41,13 +43,15 @@ const Booking = props => {
                 <th>Service</th>
                 <th>Appointment Date</th>
                 <th>Total Charge</th>
+                <th>Payment Method</th>
                 <th>Status</th>
+                <th className='text-center'>Invoice</th>
               </tr>
             </thead>
             <tbody>
             {
                 bookingList ? bookingList.length === 0 ? (
-                  <tr><td colSpan={6} className="text-center pt-5 pb-5">No data</td></tr> 
+                  <tr><td colSpan={8} className="text-center pt-5 pb-5">No data</td></tr> 
                 ) : bookingList.map(item => (
                   <tr>
                     <td>{item.vehicleType}</td>
@@ -55,10 +59,21 @@ const Booking = props => {
                     <td>{item.serviceName}</td>
                     <td>{item.appointmentDate}</td>
                     <td>${item.total_charge}</td>
+                    <td>{item.paymentMethod}</td>
                     <td>{item.status}</td>
+                    <td className='text-center'>
+                      {item.status === 'DONE' && <button
+                        style={{ color: '#2c74ca', fontWeight: 'bolder' }}
+                        type='button'
+                        className='text-button p-0'
+                        onClick={() => setOpenViewInvoice(item)}
+                      >
+                        View
+                      </button>}
+                    </td>
                   </tr>
                 )) : (
-                  <tr><td colSpan={6} className="text-center pt-5 pb-5">Loading...</td></tr>
+                  <tr><td colSpan={8} className="text-center pt-5 pb-5">Loading...</td></tr>
                 )
               }
             </tbody>
@@ -66,6 +81,9 @@ const Booking = props => {
         </div>
       </div>
       {openAddBooking && <AddBooking modalOpenClose={setOpenAddBooking} />}
+      {openViewInvoice && (
+        <ViewInvoice data={openViewInvoice} modalOpenClose={setOpenViewInvoice} />
+      )}
     </>
   );
 };

@@ -60,13 +60,14 @@ const Booking = props => {
                 <th>Service</th>
                 <th>Appointment Date</th>
                 <th>Total Charge</th>
+                <th>Payment Method</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
             {
                 filter ? filter.length === 0 ? (
-                  <tr><td colSpan={7} className="text-center pt-5 pb-5">No data</td></tr> 
+                  <tr><td colSpan={8} className="text-center pt-5 pb-5">No data</td></tr> 
                 ) : filter.map(item => (
                   <tr>
                     <td>{item.vehicleType}</td>
@@ -75,6 +76,7 @@ const Booking = props => {
                     <td>{item.serviceName}</td>
                     <td>{item.appointmentDate}</td>
                     <td>${item.total_charge}</td>
+                    <td>${item.paymentMethod}</td>
                     <td>
                       <select style={{ width: '100%', border: 0, outline: 0 }} value={item.status} 
                         onChange={(e) => 
@@ -96,7 +98,7 @@ const Booking = props => {
                     </td>
                   </tr>
                 )) : (
-                  <tr><td colSpan={7} className="text-center pt-5 pb-5">Loading...</td></tr>
+                  <tr><td colSpan={8} className="text-center pt-5 pb-5">Loading...</td></tr>
                 )
               }
             </tbody>
