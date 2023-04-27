@@ -54,7 +54,7 @@ const AddManager = props => {
   return (
     <>
       <Model
-        headerTitle="Add Part"
+        headerTitle="Add Manager"
         modalId="signUpModal"
         modalClass="modal-lg"
         closeModel={closeModel}

@@ -52,7 +52,7 @@ const Booking = props => {
       <div className="vehicle">
         <div className='vehicle-list'>
           <div className='vehicle-list-header'>
-            <h2>Booking List</h2>
+            <h2>{userId ? 'User' : locId ? 'Location' : ''} Booking List</h2>
             {/* <button type='button' onClick={() => setOpenAddBooking(true)}>
               Book Appointment
             </button> */}
